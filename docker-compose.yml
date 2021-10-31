@@ -1,0 +1,35 @@
+version: "3"
+services:
+  gogs:
+    image: gogs/gogs
+    links:
+      - gogs-db
+    depends_on:
+      - gogs-db
+    ports:
+      - "10022:22"
+    environment:
+      - TZ=Asia/Shanghai
+  drone:
+    image: drone/drone:2
+    links:
+      - drone-db
+    depends_on:
+      - drone-db
+    environment:
+      - TZ=Asia/Shanghai
+      - DRONE_AGENTS_ENABLED=true 
+      - DRONE_GOGS_SERVER=${DRONE_GOGS_SERVER}
+      - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
+      - DRONE_SERVER_HOST=${DRONE_SERVER_HOST}
+      - DRONE_SERVER_PROTO=${DRONE_SERVER_PROTO}
+      - DRONE_DATABASE_DRIVER=postgres
+      - DRONE_DATABASE_DATASOURCE=postgres://drone:${POSTGRES_PASSWORD}@drone-db:5432/drone?sslmode=disable
+  gogs-db:
+    image: postgres:alpine
+    environment:
+      - TZ=Asia/Shanghai
+  drone-db:
+    image: postgres:alpine
+    environment:
+      - TZ=Asia/Shanghai

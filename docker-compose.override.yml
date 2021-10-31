@@ -1,0 +1,24 @@
+version: "3"
+services:
+  gogs:
+    ports:
+      - "13000:3000"
+    volumes:
+      - /docker-data/gogs-drone/data/gogs:/data
+  drone:
+    ports:
+      - "10080:80"
+  gogs-db:
+    volumes:
+      - /docker-data/gogs-drone/db/gogs/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=gogs
+      - POSTGRES_USER=gogs
+      - POSTGRES_PASSWORD=OF6LZKdrPWRY5dht
+  drone-db:
+    volumes:
+      - /docker-data/gogs-drone/db/drone/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=drone
+      - POSTGRES_DB=drone

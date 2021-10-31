@@ -1,0 +1,24 @@
+version: "3"
+services:
+  gogs:
+    restart: always
+    networks:
+      default:
+        ipv4_address: 172.19.0.3
+    volumes:
+      - /docker-data/gogs-drone/gogs/data:/data
+  gogs-db:
+    restart: always
+    networks:
+      default:
+    volumes:
+      - /docker-data/gogs-drone/db/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=OF6LZKdrPWRY5dht
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16
